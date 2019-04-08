@@ -203,6 +203,7 @@ contract BridgeOperatorBase is Owned {
         }
 
         require(signatoriesCount > 0);
+        
         uint256 count = signatoriesCount.mul(2).div(3);
         approval = count.max(1);
     }
@@ -362,10 +363,12 @@ contract BridgeOperatorBase is Owned {
         uint256 i;
         uint256 signed = 0;
         for (i = 0; i < _V.length; ++i) {
-            require(isValidSignatory(address(ecrecover(_transferBundleHash, _V[i], _R[i], _S[i]))));
-            require(signatoryRegistry.isValid(address(ecrecover(_transferBundleHash, _V[i], _R[i], _S[i]))));
+            address signatory = ecrecover(_transferBundleHash, _V[i], _R[i], _S[i]);
 
-            if (signatories[ecrecover(_transferBundleHash, _V[i], _R[i], _S[i])]) {
+            require(isValidSignatory(signatory));
+            require(signatoryRegistry.isValid(signatory));
+
+            if (signatories[signatory]) {
                 signed += 1;
             }
         }
