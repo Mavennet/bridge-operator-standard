@@ -144,7 +144,7 @@ library SafeMath {
 contract BridgeOperatorBase is Owned {
     using SafeMath for uint128;
 
-    uint128 constant MAX_RING_MEMBERS = 32;
+    uint128 constant MAX_SIGNATORIES = 32;
     uint128 internal signatoriesCount;
     uint128 internal approval;
     mapping(address => bool) internal signatories;
@@ -192,16 +192,19 @@ contract BridgeOperatorBase is Owned {
     /// @param _signatories list of signatory addresses
     function initializeSignatories(address[] _signatories) public onlyOwner {
         require(_signatories.length != 0);
-        require(_signatories.length < MAX_RING_MEMBERS);
+        require(_signatories.length < MAX_SIGNATORIES);
         require(signatoriesCount == 0);
-        require(signatoriesCount < MAX_RING_MEMBERS);
+        require(signatoriesCount < MAX_SIGNATORIES);
 
-        signatoriesCount = _signatories.length;
-        for (uint128 i=0; i < signatoriesCount; i++) {
-            require(signatoryRegistry.isValid(address(_signatories[i])));
-            signatories[_signatories[i]] = true;
+        for (uint128 i=0; i < _signatories.length; i++) {
+            if (signatoryRegistry.isValid(address(_signatories[i]))) {
+                signatories[_signatories[i]] = true;
+                signatoriesCount++;
+            }
         }
 
+        require(signatoriesCount > 0);
+        
         uint128 count = signatoriesCount.mul(2).div(3);
         approval = count.max(1);
     }
@@ -210,7 +213,7 @@ contract BridgeOperatorBase is Owned {
     /// @param _signatory signatory address
     function addSignatory(address _signatory) public onlyOwner {
         require(_signatory != address(0));
-        require(signatoriesCount < MAX_RING_MEMBERS);
+        require(signatoriesCount < MAX_SIGNATORIES);
         require(!signatories[_signatory]);
         require(signatoryRegistry.isValid(address(_signatory)));
 
@@ -283,6 +286,7 @@ contract BridgeOperatorBase is Owned {
         bytes32[] _initTransferHashes
     ) 
         public 
+        onlyOwner
     {
         require(_sourceBlockHash != 0);
         require(_sourceTransactionHashes.length == _recipients.length);

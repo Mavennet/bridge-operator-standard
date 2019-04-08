@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the bidirectional bridge operator standard for [Aion network's AIP #005](https://github.com/Mavennet/AIP/blob/master/AIP-005/AIP%23005.md). 
+This repository contains the contracts for bidirectional bridge operator standard for [Aion network's AIP #005](https://github.com/Mavennet/AIP/blob/master/AIP-005/AIP%23005.md). 
 
 A standard to meet the functionality requirements of a bidirectional bridge operator to support two way flow of tokens or assets.
 
