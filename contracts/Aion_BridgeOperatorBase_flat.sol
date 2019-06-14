@@ -271,7 +271,7 @@ contract BridgeOperatorBase is Owned {
     /// the source chain
     /// @param _recipients The destination chain account addresses participating in transfer process
     /// @param _amounts The respective amounts to be thawed by bridge operator
-    /// @param _publicKeys The public keys of signatories
+    /// @param _publicKeys The public keys of signatories' Aion accounts (not Aion account addresses)
     /// @param _signaturePart1 The first 32 bytes of a signature of ED25519
     /// @param _signaturePart2 The last 32 bytes of a signature of ED25519
     /// @param _initTransferHashes keccak256 hashes of respective transfer recipients, amounts, UUIDs
