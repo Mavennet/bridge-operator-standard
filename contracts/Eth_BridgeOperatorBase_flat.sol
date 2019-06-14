@@ -302,6 +302,7 @@ contract BridgeOperatorBase is Owned {
 
         if (bundleTxMap[transferBundleHash] != 0) {
             SuccessfulTransactionHash(getBundle(transferBundleHash));
+            return;
         }
         
         require(bundleTxMap[transferBundleHash] == 0);
